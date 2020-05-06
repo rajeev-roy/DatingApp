@@ -12,9 +12,8 @@ namespace DatingApp.API.Data
          Task<bool> SaveAll();
          Task<PageList<User>> GetUsers(UserParams userParams);
          Task<User> GetUser(int id);
-
          Task<Photo> GetPhoto(int id);
-
          Task<Photo> GetMainPhotoForUser(int id);
+         Task<Like> GetLike(int userId, int recipientId);
     }
 }
