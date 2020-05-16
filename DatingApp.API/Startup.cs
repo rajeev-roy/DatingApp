@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using DatingApp.API.Helpers;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DatingApp.API
 {
@@ -43,20 +46,39 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityBuilder builder = services.AddIdentityCore<User>( opt => {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric =false;
+                opt.Password.RequireUppercase = false;
+            } );
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+
             services.AddCors();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(DatingRepository).Assembly);
-            services.AddScoped<IAuthRepository,AuthRepository>();
+            //services.AddScoped<IAuthRepository,AuthRepository>();
             services.AddDbContext<DataContext>(x => {
                 x.UseLazyLoadingProxies();
                 x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddScoped<LogUserActivity>();
-            services.AddControllers().AddNewtonsoftJson(opt => {
+            services.AddControllers( options => {
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+            })            
+            .AddNewtonsoftJson(opt => {
                 opt.SerializerSettings.ReferenceLoopHandling = 
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options => {
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters{
@@ -68,6 +90,12 @@ namespace DatingApp.API
 
                     };
                 });
+
+            services.AddAuthorization( options => {
+                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                 options.AddPolicy("ModeratorPhotoRole", policy => policy.RequireRole("Admin","Moderator"));
+                 options.AddPolicy("VipOnly", policy => policy.RequireRole("VIP"));   
+            });
                 
             
         }
@@ -80,7 +108,8 @@ namespace DatingApp.API
                 app.UseDeveloperExceptionPage();
             }
             else if(env.IsProduction())
-            {
+            {   
+                // comment below custom exception to track error on azure.
                 app.UseExceptionHandler( builder => {
                     builder.Run( async context => {
                         context.Response.StatusCode= (int)HttpStatusCode.InternalServerError;
@@ -94,14 +123,16 @@ namespace DatingApp.API
                         //context.Response.Headers.Add();
                     });
                 });
+                //app.UseHsts();  -- for azure hosting
             }
 
-            //app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();  AZURE DEPLOYMENT
+            //app.UseDeveloperExceptionPage(); for excetion tracking after deployement on Azure
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
            

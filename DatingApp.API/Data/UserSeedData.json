@@ -1,6 +1,6 @@
 [
     {
-      "Name": "Lucy",
+      "UserName": "Lucy",
       "Gender": "female",
       "DateOfBirth": "1952-04-11",
       "Password": "password",
@@ -21,7 +21,7 @@
       ]
     },
     {
-      "Name": "Amy",
+      "UserName": "Amy",
       "Gender": "female",
       "DateOfBirth": "1987-11-15",
       "Password": "password",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "Name": "Cecelia",
+      "UserName": "Cecelia",
       "Gender": "female",
       "DateOfBirth": "1974-01-04",
       "Password": "password",
@@ -63,7 +63,7 @@
       ]
     },
     {
-      "Name": "Victoria",
+      "UserName": "Victoria",
       "Gender": "female",
       "DateOfBirth": "1966-10-31",
       "Password": "password",
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "Name": "Ginger",
+      "UserName": "Ginger",
       "Gender": "female",
       "DateOfBirth": "1954-06-29",
       "Password": "password",
@@ -105,7 +105,7 @@
       ]
     },
     {
-          "Name": "Reid",
+          "UserName": "Reid",
           "Gender": "male",
           "DateOfBirth": "1959-09-27",
           "Password": "password",
@@ -126,7 +126,7 @@
           ]
         },
         {
-          "Name": "Wong",
+          "UserName": "Wong",
           "Gender": "male",
           "DateOfBirth": "1963-03-18",
           "Password": "password",
@@ -147,7 +147,7 @@
           ]
         },
         {
-          "Name": "Griffith",
+          "UserName": "Griffith",
           "Gender": "male",
           "DateOfBirth": "1999-09-19",
           "Password": "password",
@@ -168,7 +168,7 @@
           ]
         },
         {
-          "Name": "Dixon",
+          "UserName": "Dixon",
           "Gender": "male",
           "DateOfBirth": "1996-03-07",
           "Password": "password",
@@ -189,7 +189,7 @@
           ]
         },
         {
-          "Name": "Velez",
+          "UserName": "Velez",
           "Gender": "male",
           "DateOfBirth": "1958-02-28",
           "Password": "password",

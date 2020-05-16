@@ -6,6 +6,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
@@ -39,6 +40,12 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { ListsResolver } from './_resolvers/lists.resolver';
 import { MessagesResolver } from './_resolvers/messages.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/hasRole.directive';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { AdminService } from './_services/admin.service';
+import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 
 // tslint:disable-next-line: use-pipe-transform-interface
 @Pipe({
@@ -60,43 +67,49 @@ export class CustomHammerConfig extends HammerGestureConfig{
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavComponent,
-    HomeComponent,
-    RegisterComponent,
-    MemberListComponent,
-    ListsComponent,
-    MessagesComponent,
-    MemberCardComponent,
-    MemberDetailsComponent,
-    MembersEditComponent,
-    PhotoEditorComponent,
-    TimeAgoExtendsPipe,
-    MemberMessagesComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TabsModule.forRoot(),
-    ButtonsModule.forRoot(),
-    PaginationModule.forRoot(),
-    BrowserAnimationsModule,
-    BsDropdownModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
-    NgxGalleryModule,
-    FileUploadModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter1,
-        whitelistedDomains: ['localhost:5000'],
-        blacklistedRoutes: ['localhost:5000/api/auth']
-      }
-    })
+   declarations: [
+      AppComponent,
+      NavComponent,
+      HomeComponent,
+      RegisterComponent,
+      MemberListComponent,
+      ListsComponent,
+      MessagesComponent,
+      MemberCardComponent,
+      MemberDetailsComponent,
+      MembersEditComponent,
+      PhotoEditorComponent,
+      TimeAgoExtendsPipe,
+      MemberMessagesComponent,
+      AdminPanelComponent,
+      HasRoleDirective,
+      UserManagementComponent,
+      PhotoManagementComponent,
+      RolesModalComponent
+   ],
+   imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      HttpClientModule,
+      FormsModule,
+      ReactiveFormsModule,
+      TabsModule.forRoot(),
+      ButtonsModule.forRoot(),
+      PaginationModule.forRoot(),
+      BrowserAnimationsModule,
+      BsDropdownModule.forRoot(),
+      BsDatepickerModule.forRoot(),
+      RouterModule.forRoot(appRoutes),
+      ModalModule.forRoot(),
+      NgxGalleryModule,
+      FileUploadModule,
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter1,
+          whitelistedDomains: ['localhost:5000'],
+          blacklistedRoutes: ['localhost:5000/api/auth']
+        }
+      })
   ],
   providers: [
     AuthService,
@@ -109,8 +122,12 @@ export class CustomHammerConfig extends HammerGestureConfig{
     MemberListResolver,
     ListsResolver,
     MemberEditResolver,
+    AdminService,
     MessagesResolver,
     { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
+  ],
+  entryComponents: [
+    RolesModalComponent
   ],
   bootstrap: [AppComponent]
 })
